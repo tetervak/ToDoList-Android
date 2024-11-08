@@ -17,21 +17,21 @@ limitations under the License.
 package com.example.todolist.ui.screens.tasks
 
 enum class TaskActionOption(val title: String) {
-  EditTask("Edit task"),
-  ToggleFlag("Toggle flag"),
-  DeleteTask("Delete task");
+  EDIT_TASK("Edit task"),
+  TOGGLE_FLAG("Toggle flag"),
+  DELETE_TASK("Delete task");
 
   companion object {
     fun getByTitle(title: String): TaskActionOption {
       entries.forEach { action -> if (title == action.title) return action }
 
-      return EditTask
+      return EDIT_TASK
     }
 
     fun getOptions(hasEditOption: Boolean): List<String> {
       val options = mutableListOf<String>()
       entries.forEach { taskAction ->
-        if (hasEditOption || taskAction != EditTask) {
+        if (hasEditOption || taskAction != EDIT_TASK) {
           options.add(taskAction.title)
         }
       }

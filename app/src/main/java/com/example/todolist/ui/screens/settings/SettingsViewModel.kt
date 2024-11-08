@@ -16,9 +16,6 @@ limitations under the License.
 
 package com.example.todolist.ui.screens.settings
 
-import com.example.todolist.LOGIN_SCREEN
-import com.example.todolist.SIGN_UP_SCREEN
-import com.example.todolist.SPLASH_SCREEN
 import com.example.todolist.data.service.AccountService
 import com.example.todolist.data.service.LogService
 import com.example.todolist.data.service.StorageService
@@ -35,21 +32,17 @@ class SettingsViewModel @Inject constructor(
 ) : MakeItSoViewModel(logService) {
   val uiState = accountService.currentUser.map { SettingsUiState(it.isAnonymous) }
 
-  fun onLoginClick(openScreen: (String) -> Unit) = openScreen(LOGIN_SCREEN)
-
-  fun onSignUpClick(openScreen: (String) -> Unit) = openScreen(SIGN_UP_SCREEN)
-
-  fun onSignOutClick(restartApp: (String) -> Unit) {
+  fun onSignOut(restartApp: () -> Unit) {
     launchCatching {
       accountService.signOut()
-      restartApp(SPLASH_SCREEN)
+      restartApp()
     }
   }
 
-  fun onDeleteMyAccountClick(restartApp: (String) -> Unit) {
+  fun onDeleteMyAccount(restartApp: () -> Unit) {
     launchCatching {
       accountService.deleteAccount()
-      restartApp(SPLASH_SCREEN)
+      restartApp()
     }
   }
 }

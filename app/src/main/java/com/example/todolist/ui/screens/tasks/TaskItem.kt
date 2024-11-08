@@ -31,7 +31,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todolist.R.drawable as AppIcon
-import com.example.todolist.ui.common.composable.DropdownContextMenu
 import com.example.todolist.ui.common.ext.contextMenu
 import com.example.todolist.ui.common.ext.hasDueDate
 import com.example.todolist.ui.common.ext.hasDueTime
@@ -43,9 +42,8 @@ import java.lang.StringBuilder
 @ExperimentalMaterial3Api
 fun TaskItem(
   task: Task,
-  options: List<String>,
   onCheckChange: () -> Unit,
-  onActionClick: (String) -> Unit
+  onTaskAction: (TaskActionOption) -> Unit,
 ) {
   OutlinedCard(
     colors = CardDefaults.
@@ -75,7 +73,10 @@ fun TaskItem(
         )
       }
 
-      DropdownContextMenu(options, Modifier.contextMenu(), onActionClick)
+      DropdownContextMenu(
+        onTaskAction = onTaskAction,
+        modifier = Modifier.contextMenu()
+      )
     }
   }
 }

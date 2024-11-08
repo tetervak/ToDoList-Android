@@ -38,7 +38,7 @@ import com.example.todolist.ui.theme.ToDoListTheme
 
 @Composable
 fun LoginScreen(
-  openAndPopUp: (String, String) -> Unit,
+  onLoggedIn: () -> Unit,
   viewModel: LoginViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState
@@ -47,7 +47,7 @@ fun LoginScreen(
     uiState = uiState,
     onEmailChange = viewModel::onEmailChange,
     onPasswordChange = viewModel::onPasswordChange,
-    onSignInClick = { viewModel.onSignInClick(openAndPopUp) },
+    onSignInClick = { viewModel.onSignInClick(onLoggedIn) },
     onForgotPasswordClick = viewModel::onForgotPasswordClick
   )
 }

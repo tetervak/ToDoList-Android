@@ -17,8 +17,6 @@ limitations under the License.
 package com.example.todolist.ui.screens.splash
 
 import androidx.compose.runtime.mutableStateOf
-import com.example.todolist.SPLASH_SCREEN
-import com.example.todolist.TASKS_SCREEN
 import com.example.todolist.data.service.AccountService
 import com.example.todolist.data.service.ConfigurationService
 import com.example.todolist.data.service.LogService
@@ -33,20 +31,24 @@ class SplashViewModel @Inject constructor(
   private val accountService: AccountService,
   logService: LogService
 ) : MakeItSoViewModel(logService) {
+
   val showError = mutableStateOf(false)
 
   init {
     launchCatching { configurationService.fetchConfiguration() }
   }
 
-  fun onAppStart(openAndPopUp: (String, String) -> Unit) {
-
+  fun onAppStart(onSplashed: () -> Unit) {
     showError.value = false
-    if (accountService.hasUser) openAndPopUp(TASKS_SCREEN, SPLASH_SCREEN)
-    else createAnonymousAccount(openAndPopUp)
+    if (accountService.hasUser){
+      onSplashed()
+    }
+    else {
+      createAnonymousAccount(onSplashed)
+    }
   }
 
-  private fun createAnonymousAccount(openAndPopUp: (String, String) -> Unit) {
+  private fun createAnonymousAccount(onSplashed: () -> Unit) {
     launchCatching(snackbar = false) {
       try {
         accountService.createAnonymousAccount()
@@ -54,7 +56,7 @@ class SplashViewModel @Inject constructor(
         showError.value = true
         throw ex
       }
-      openAndPopUp(TASKS_SCREEN, SPLASH_SCREEN)
+      onSplashed()
     }
   }
 }

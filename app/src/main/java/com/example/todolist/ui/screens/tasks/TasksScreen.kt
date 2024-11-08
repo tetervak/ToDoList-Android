@@ -43,24 +43,24 @@ import com.example.todolist.ui.theme.ToDoListTheme
 @Composable
 @ExperimentalMaterial3Api
 fun TasksScreen(
-  openScreen: (String) -> Unit,
+  onAddTask: () -> Unit,
+  onEditTask: (String) -> Unit,
+  onStats: () -> Unit,
+  onSettings: () -> Unit,
   viewModel: TasksViewModel = hiltViewModel()
 ) {
   val tasks = viewModel.tasks.collectAsStateWithLifecycle(emptyList())
-  val options by viewModel.options
 
   TasksScreenContent(
     tasks = tasks.value,
-    options = options,
-    onAddClick = viewModel::onAddClick,
-    onStatsClick = viewModel::onStatsClick,
-    onSettingsClick = viewModel::onSettingsClick,
-    onTaskCheckChange = viewModel::onTaskCheckChange,
-    onTaskActionClick = viewModel::onTaskActionClick,
-    openScreen = openScreen
+    onAddTask = onAddTask,
+    onCheckChange = viewModel::onTaskCheckChange,
+    onEditTask = onEditTask,
+    onToggleFlag = viewModel::onToggleFlag,
+    onDeleteTask = viewModel::onDeleteTask,
+    onStats = onStats,
+    onSettings = onSettings,
   )
-
-  LaunchedEffect(viewModel) { viewModel.loadTaskOptions() }
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -69,18 +69,18 @@ fun TasksScreen(
 fun TasksScreenContent(
   modifier: Modifier = Modifier,
   tasks: List<Task>,
-  options: List<String>,
-  onAddClick: ((String) -> Unit) -> Unit,
-  onStatsClick: ((String) -> Unit) -> Unit,
-  onSettingsClick: ((String) -> Unit) -> Unit,
-  onTaskCheckChange: (Task) -> Unit,
-  onTaskActionClick: ((String) -> Unit, Task, String) -> Unit,
-  openScreen: (String) -> Unit
+  onAddTask: () -> Unit,
+  onCheckChange: (Task) -> Unit,
+  onEditTask: (String) -> Unit,
+  onToggleFlag: (Task) -> Unit,
+  onDeleteTask: (String) -> Unit,
+  onStats: () -> Unit,
+  onSettings: () -> Unit,
 ) {
   Scaffold(
     floatingActionButton = {
       FloatingActionButton(
-        onClick = { onAddClick(openScreen) },
+        onClick = onAddTask,
         modifier = modifier.padding(16.dp)
       ) {
         Icon(Icons.Filled.Add, "Add")
@@ -94,9 +94,9 @@ fun TasksScreenContent(
         title = AppText.tasks,
         modifier = Modifier.toolbarActions(),
         primaryActionIcon = AppIcon.ic_stats,
-        primaryAction = { onStatsClick(openScreen) },
+        primaryAction = onStats,
         secondaryActionIcon = AppIcon.ic_settings,
-        secondaryAction = { onSettingsClick(openScreen) }
+        secondaryAction = onSettings
       )
 
       Spacer(modifier = Modifier.smallSpacer())
@@ -105,9 +105,14 @@ fun TasksScreenContent(
         items(tasks, key = { it.id }) { taskItem ->
           TaskItem(
             task = taskItem,
-            options = options,
-            onCheckChange = { onTaskCheckChange(taskItem) },
-            onActionClick = { action -> onTaskActionClick(openScreen, taskItem, action) }
+            onCheckChange = { onCheckChange(taskItem) },
+            onTaskAction = { option: TaskActionOption ->
+              when (option) {
+                TaskActionOption.EDIT_TASK -> onEditTask(taskItem.id)
+                TaskActionOption.TOGGLE_FLAG -> onToggleFlag(taskItem)
+                TaskActionOption.DELETE_TASK -> onDeleteTask(taskItem.id)
+              }
+            }
           )
         }
       }
@@ -125,18 +130,16 @@ fun TasksScreenPreview() {
     completed = true
   )
 
-  val options = TaskActionOption.getOptions(hasEditOption = true)
-
   ToDoListTheme {
     TasksScreenContent(
       tasks = listOf(task),
-      options = options,
-      onAddClick = { },
-      onStatsClick = { },
-      onSettingsClick = { },
-      onTaskCheckChange = { },
-      onTaskActionClick = { _, _, _ -> },
-      openScreen = { }
+      onAddTask = {},
+      onEditTask = {},
+      onToggleFlag = {},
+      onDeleteTask = {},
+      onCheckChange = {},
+      onStats = {},
+      onSettings = {}
     )
   }
 }

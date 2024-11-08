@@ -18,13 +18,10 @@ package com.example.todolist.ui.common.composable
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
@@ -34,47 +31,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DropdownContextMenu(
-  options: List<String>,
-  modifier: Modifier,
-  onActionClick: (String) -> Unit
-) {
-  var isExpanded by remember { mutableStateOf(false) }
-
-  ExposedDropdownMenuBox(
-    expanded = isExpanded,
-    modifier = modifier,
-    onExpandedChange = { isExpanded = it }
-  ) {
-    Icon(
-      modifier = Modifier.padding(8.dp, 0.dp)
-        .menuAnchor(type = MenuAnchorType.PrimaryNotEditable),
-      imageVector = Icons.Default.MoreVert,
-      contentDescription = "More"
-    )
-
-    ExposedDropdownMenu(
-      modifier = Modifier.width(180.dp),
-      expanded = isExpanded,
-      onDismissRequest = { isExpanded = false },
-      containerColor = MaterialTheme.colorScheme.surface
-    ) {
-      options.forEach { selectionOption ->
-        DropdownMenuItem(
-          onClick = {
-            isExpanded = false
-            onActionClick(selectionOption)
-          },
-          text = { Text(text = selectionOption) }
-        )
-      }
-    }
-  }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

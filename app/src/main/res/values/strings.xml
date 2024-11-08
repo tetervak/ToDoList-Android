@@ -24,6 +24,11 @@
 
     <!-- TasksScreen -->
     <string name="tasks">Tasks</string>
+    <string-array name="task_action_options">
+        <item>Edit task</item>
+        <item>Toggle flag</item>
+        <item>Delete task</item>
+    </string-array>
 
     <!-- EditTaskScreen -->
     <string name="edit_task">Edit your task</string>

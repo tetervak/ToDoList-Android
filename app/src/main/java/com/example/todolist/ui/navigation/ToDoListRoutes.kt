@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.todolist
+package com.example.todolist.ui.navigation
 
 const val SPLASH_SCREEN = "SplashScreen"
 const val SETTINGS_SCREEN = "SettingsScreen"
@@ -25,4 +25,3 @@ const val EDIT_TASK_SCREEN = "EditTaskScreen"
 const val STATS_SCREEN = "StatsScreen"
 
 const val TASK_ID = "taskId"
-const val TASK_ID_ARG = "?$TASK_ID={$TASK_ID}"

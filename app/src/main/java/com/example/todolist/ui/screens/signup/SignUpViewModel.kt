@@ -18,8 +18,6 @@ package com.example.todolist.ui.screens.signup
 
 import androidx.compose.runtime.mutableStateOf
 import com.example.todolist.R.string as AppText
-import com.example.todolist.SETTINGS_SCREEN
-import com.example.todolist.SIGN_UP_SCREEN
 import com.example.todolist.ui.common.ext.isValidEmail
 import com.example.todolist.ui.common.ext.isValidPassword
 import com.example.todolist.ui.common.ext.passwordMatches
@@ -55,7 +53,7 @@ class SignUpViewModel @Inject constructor(
     uiState.value = uiState.value.copy(repeatPassword = newValue)
   }
 
-  fun onSignUpClick(openAndPopUp: (String, String) -> Unit) {
+  fun onSignUpClick(onSignedUp: () -> Unit) {
     if (!email.isValidEmail()) {
       SnackbarManager.showMessage(AppText.email_error)
       return
@@ -73,7 +71,7 @@ class SignUpViewModel @Inject constructor(
 
     launchCatching {
       accountService.linkAccount(email, password)
-      openAndPopUp(SETTINGS_SCREEN, SIGN_UP_SCREEN)
+      onSignedUp()
     }
   }
 }

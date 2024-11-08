@@ -35,22 +35,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.todolist.ui.common.composable.PermissionDialog
 import com.example.todolist.ui.common.composable.RationaleDialog
 import com.example.todolist.ui.common.snackbar.SnackbarManager
-import com.example.todolist.ui.screens.edittask.EditTaskScreen
-import com.example.todolist.ui.screens.login.LoginScreen
-import com.example.todolist.ui.screens.settings.SettingsScreen
-import com.example.todolist.ui.screens.signup.SignUpScreen
-import com.example.todolist.ui.screens.splash.SplashScreen
-import com.example.todolist.ui.screens.stats.StatsScreen
-import com.example.todolist.ui.screens.tasks.TasksScreen
+import com.example.todolist.ui.navigation.ToDoListNavHost
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -78,14 +68,8 @@ fun AppRootScreen() {
             }
           )
         },
-      ) { innerPaddingModifier ->
-        NavHost(
-          navController = appState.navController,
-          startDestination = SPLASH_SCREEN,
-          modifier = Modifier.padding(innerPaddingModifier)
-        ) {
-          makeItSoGraph(appState)
-        }
+      ) { innerPadding ->
+        ToDoListNavHost(appState, Modifier.padding(innerPadding))
       }
     }
 }
@@ -119,44 +103,4 @@ fun rememberAppState(
 fun resources(): Resources {
   //LocalConfiguration.current
   return LocalContext.current.resources
-}
-
-@ExperimentalMaterial3Api
-fun NavGraphBuilder.makeItSoGraph(appState: ToDoListAppState) {
-  composable(SPLASH_SCREEN) {
-    SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
-  }
-
-  composable(SETTINGS_SCREEN) {
-    SettingsScreen(
-      restartApp = { route -> appState.clearAndNavigate(route) },
-      openScreen = { route -> appState.navigate(route) }
-    )
-  }
-
-  composable(STATS_SCREEN) {
-    StatsScreen()
-  }
-
-  composable(LOGIN_SCREEN) {
-    LoginScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
-  }
-
-  composable(SIGN_UP_SCREEN) {
-    SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
-  }
-
-  composable(TASKS_SCREEN) { TasksScreen(openScreen = { route -> appState.navigate(route) }) }
-
-  composable(
-    route = "$EDIT_TASK_SCREEN$TASK_ID_ARG",
-    arguments = listOf(navArgument(TASK_ID) {
-      nullable = true
-      defaultValue = null
-    })
-  ) {
-    EditTaskScreen(
-      popUpScreen = { appState.popUp() }
-    )
-  }
 }

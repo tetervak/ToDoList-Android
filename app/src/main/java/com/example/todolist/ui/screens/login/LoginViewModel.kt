@@ -17,9 +17,7 @@ limitations under the License.
 package com.example.todolist.ui.screens.login
 
 import androidx.compose.runtime.mutableStateOf
-import com.example.todolist.LOGIN_SCREEN
 import com.example.todolist.R.string as AppText
-import com.example.todolist.SETTINGS_SCREEN
 import com.example.todolist.ui.common.ext.isValidEmail
 import com.example.todolist.ui.common.snackbar.SnackbarManager
 import com.example.todolist.data.service.AccountService
@@ -49,7 +47,7 @@ class LoginViewModel @Inject constructor(
     uiState.value = uiState.value.copy(password = newValue)
   }
 
-  fun onSignInClick(openAndPopUp: (String, String) -> Unit) {
+  fun onSignInClick(onLoggedIn: () -> Unit) {
     if (!email.isValidEmail()) {
       SnackbarManager.showMessage(AppText.email_error)
       return
@@ -62,7 +60,7 @@ class LoginViewModel @Inject constructor(
 
     launchCatching {
       accountService.authenticate(email, password)
-      openAndPopUp(SETTINGS_SCREEN, LOGIN_SCREEN)
+      onLoggedIn()
     }
   }
 

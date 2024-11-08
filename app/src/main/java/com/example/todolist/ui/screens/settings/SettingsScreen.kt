@@ -42,18 +42,19 @@ import com.example.todolist.ui.theme.ToDoListTheme
 @ExperimentalMaterial3Api
 @Composable
 fun SettingsScreen(
-  restartApp: (String) -> Unit,
-  openScreen: (String) -> Unit,
+  restartApp: () -> Unit,
+  onLogin: () -> Unit,
+  onSignUp: () -> Unit,
   viewModel: SettingsViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState(initial = SettingsUiState(false))
 
   SettingsScreenContent(
     uiState = uiState,
-    onLoginClick = { viewModel.onLoginClick(openScreen) },
-    onSignUpClick = { viewModel.onSignUpClick(openScreen) },
-    onSignOutClick = { viewModel.onSignOutClick(restartApp) },
-    onDeleteMyAccountClick = { viewModel.onDeleteMyAccountClick(restartApp) }
+    onLogin = onLogin,
+    onSignUp = onSignUp,
+    onSignOut = { viewModel.onSignOut(restartApp) },
+    onDeleteMyAccount = { viewModel.onDeleteMyAccount(restartApp) }
   )
 }
 
@@ -62,10 +63,10 @@ fun SettingsScreen(
 fun SettingsScreenContent(
   modifier: Modifier = Modifier,
   uiState: SettingsUiState,
-  onLoginClick: () -> Unit,
-  onSignUpClick: () -> Unit,
-  onSignOutClick: () -> Unit,
-  onDeleteMyAccountClick: () -> Unit
+  onLogin: () -> Unit,
+  onSignUp: () -> Unit,
+  onSignOut: () -> Unit,
+  onDeleteMyAccount: () -> Unit
 ) {
   Column(
     modifier = modifier
@@ -80,15 +81,15 @@ fun SettingsScreenContent(
 
     if (uiState.isAnonymousAccount) {
       RegularCardEditor(AppText.sign_in, AppIcon.ic_sign_in, "", Modifier.card()) {
-        onLoginClick()
+        onLogin()
       }
 
       RegularCardEditor(AppText.create_account, AppIcon.ic_create_account, "", Modifier.card()) {
-        onSignUpClick()
+        onSignUp()
       }
     } else {
-      SignOutCard { onSignOutClick() }
-      DeleteMyAccountCard { onDeleteMyAccountClick() }
+      SignOutCard { onSignOut() }
+      DeleteMyAccountCard { onDeleteMyAccount() }
     }
   }
 }
@@ -157,10 +158,10 @@ fun SettingsScreenPreview() {
   ToDoListTheme {
     SettingsScreenContent(
       uiState = uiState,
-      onLoginClick = { },
-      onSignUpClick = { },
-      onSignOutClick = { },
-      onDeleteMyAccountClick = { }
+      onLogin = { },
+      onSignUp = { },
+      onSignOut = { },
+      onDeleteMyAccount = { }
     )
   }
 }

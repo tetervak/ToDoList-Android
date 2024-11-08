@@ -18,7 +18,7 @@ package com.example.todolist.ui.screens.edittask
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
-import com.example.todolist.TASK_ID
+import com.example.todolist.ui.navigation.TASK_ID
 import com.example.todolist.ui.common.ext.idFromParameter
 import com.example.todolist.data.Task
 import com.example.todolist.data.service.LogService

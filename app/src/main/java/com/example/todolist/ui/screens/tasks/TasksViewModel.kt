@@ -16,11 +16,6 @@ limitations under the License.
 
 package com.example.todolist.ui.screens.tasks
 
-import androidx.compose.runtime.mutableStateOf
-import com.example.todolist.EDIT_TASK_SCREEN
-import com.example.todolist.SETTINGS_SCREEN
-import com.example.todolist.STATS_SCREEN
-import com.example.todolist.TASK_ID
 import com.example.todolist.data.Task
 import com.example.todolist.data.service.ConfigurationService
 import com.example.todolist.data.service.LogService
@@ -35,38 +30,18 @@ class TasksViewModel @Inject constructor(
   private val storageService: StorageService,
   private val configurationService: ConfigurationService
 ) : MakeItSoViewModel(logService) {
-  val options = mutableStateOf<List<String>>(listOf())
 
   val tasks = storageService.tasks
-
-  fun loadTaskOptions() {
-    val hasEditOption = configurationService.isShowTaskEditButtonConfig
-    options.value = TaskActionOption.getOptions(hasEditOption)
-  }
 
   fun onTaskCheckChange(task: Task) {
     launchCatching { storageService.update(task.copy(completed = !task.completed)) }
   }
 
-  fun onAddClick(openScreen: (String) -> Unit) = openScreen(EDIT_TASK_SCREEN)
-
-  fun onSettingsClick(openScreen: (String) -> Unit) = openScreen(SETTINGS_SCREEN)
-
-  fun onStatsClick(openScreen: (String) -> Unit) = openScreen(STATS_SCREEN)
-
-  fun onTaskActionClick(openScreen: (String) -> Unit, task: Task, action: String) {
-    when (TaskActionOption.getByTitle(action)) {
-      TaskActionOption.EditTask -> openScreen("$EDIT_TASK_SCREEN?$TASK_ID={${task.id}}")
-      TaskActionOption.ToggleFlag -> onFlagTaskClick(task)
-      TaskActionOption.DeleteTask -> onDeleteTaskClick(task)
-    }
-  }
-
-  private fun onFlagTaskClick(task: Task) {
+  fun onToggleFlag(task: Task) {
     launchCatching { storageService.update(task.copy(flag = !task.flag)) }
   }
 
-  private fun onDeleteTaskClick(task: Task) {
-    launchCatching { storageService.delete(task.id) }
+  fun onDeleteTask(id: String) {
+    launchCatching { storageService.delete(id) }
   }
 }
