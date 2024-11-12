@@ -37,7 +37,6 @@ import com.example.todolist.data.Priority
 import com.example.todolist.data.Task
 import com.example.todolist.ui.common.composable.ActionToolbar
 import com.example.todolist.ui.common.composable.BasicField
-import com.example.todolist.ui.common.composable.CardSelector
 import com.example.todolist.ui.common.composable.RegularCardEditor
 import com.example.todolist.ui.theme.ToDoListTheme
 import com.google.android.material.datepicker.MaterialDatePicker

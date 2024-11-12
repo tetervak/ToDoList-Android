@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.todolist.ui.common.composable
+package com.example.todolist.ui.screens.edittask
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
