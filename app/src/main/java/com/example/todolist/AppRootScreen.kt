@@ -48,7 +48,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
-@ExperimentalMaterial3Api
+@OptIn(ExperimentalMaterial3Api::class)
 fun AppRootScreen() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       RequestNotificationPermissionDialog()
@@ -56,7 +56,7 @@ fun AppRootScreen() {
 
     Surface(color = MaterialTheme.colorScheme.background) {
 
-      val appState = rememberAppState()
+      val appState: ToDoListAppState = rememberAppState()
 
       Scaffold(
         snackbarHost = {

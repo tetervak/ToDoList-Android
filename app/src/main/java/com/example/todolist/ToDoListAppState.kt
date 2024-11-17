@@ -37,7 +37,7 @@ class ToDoListAppState(
   init {
     coroutineScope.launch {
       snackbarManager.snackbarMessages.filterNotNull().collect { snackbarMessage ->
-        val text = snackbarMessage.toMessage(resources)
+        val text: String = snackbarMessage.toMessage(resources)
         snackbarHostState.showSnackbar(text)
         snackbarManager.clearSnackbarState()
       }
