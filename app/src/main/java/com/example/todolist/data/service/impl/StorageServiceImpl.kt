@@ -52,7 +52,10 @@ class StorageServiceImpl @Inject constructor(
       }
 
   override suspend fun getTask(taskId: String): Task? =
-    firestore.collection(TASK_COLLECTION).document(taskId).get().await().toObject()
+    firestore.collection(TASK_COLLECTION).document(taskId)
+      .get()
+      .await()
+      .toObject()
 
   override suspend fun save(task: Task): String =
     trace(SAVE_TASK_TRACE) {
@@ -71,7 +74,10 @@ class StorageServiceImpl @Inject constructor(
 
   override suspend fun getCompletedTasksCount(): Int {
     val query = collection.whereEqualTo(COMPLETED_FIELD, true).count()
-    return query.get(AggregateSource.SERVER).await().count.toInt()
+    return query.get(AggregateSource.SERVER)
+      .await()
+      .count
+      .toInt()
   }
 
   override suspend fun getImportantCompletedTasksCount(): Int {

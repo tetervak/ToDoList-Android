@@ -17,10 +17,12 @@ limitations under the License.
 package com.example.todolist
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,6 +30,8 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
@@ -49,12 +53,11 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 fun AppRootScreen() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       RequestNotificationPermissionDialog()
     }
-
-    Surface(color = MaterialTheme.colorScheme.background) {
 
       val appState: ToDoListAppState = rememberAppState()
 
@@ -68,10 +71,9 @@ fun AppRootScreen() {
             }
           )
         },
-      ) { innerPadding ->
-        ToDoListNavHost(appState, Modifier.padding(innerPadding))
+      ) {
+        ToDoListNavHost(appState)
       }
-    }
 }
 
 @OptIn(ExperimentalPermissionsApi::class)

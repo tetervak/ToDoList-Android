@@ -27,5 +27,4 @@ class LogServiceImpl @Inject constructor() : LogService {
     Log.e("LogService", "logNonFatalCrash: ", throwable)
     Firebase.crashlytics.recordException(throwable)
   }
-
 }

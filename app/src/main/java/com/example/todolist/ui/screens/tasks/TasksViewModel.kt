@@ -22,6 +22,7 @@ import com.example.todolist.data.service.LogService
 import com.example.todolist.data.service.StorageService
 import com.example.todolist.ui.screens.ToDoListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,7 +32,7 @@ class TasksViewModel @Inject constructor(
   private val configurationService: ConfigurationService
 ) : ToDoListViewModel(logService) {
 
-  val tasks = storageService.tasks
+  val tasks: Flow<List<Task>> = storageService.tasks
 
   fun onTaskCheckChange(task: Task) {
     launchCatching { storageService.update(task.copy(completed = !task.completed)) }
