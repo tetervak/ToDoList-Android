@@ -19,7 +19,7 @@ package com.example.todolist.ui.screens.settings
 import com.example.todolist.data.service.AccountService
 import com.example.todolist.data.service.LogService
 import com.example.todolist.data.service.StorageService
-import com.example.todolist.ui.screens.MakeItSoViewModel
+import com.example.todolist.ui.screens.ToDoListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.map
@@ -29,7 +29,7 @@ class SettingsViewModel @Inject constructor(
   logService: LogService,
   private val accountService: AccountService,
   private val storageService: StorageService
-) : MakeItSoViewModel(logService) {
+) : ToDoListViewModel(logService) {
   val uiState = accountService.currentUser.map { SettingsUiState(it.isAnonymous) }
 
   fun onSignOut(restartApp: () -> Unit) {

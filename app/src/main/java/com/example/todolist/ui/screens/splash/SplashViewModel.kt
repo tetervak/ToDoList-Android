@@ -20,7 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.todolist.data.service.AccountService
 import com.example.todolist.data.service.ConfigurationService
 import com.example.todolist.data.service.LogService
-import com.example.todolist.ui.screens.MakeItSoViewModel
+import com.example.todolist.ui.screens.ToDoListViewModel
 import com.google.firebase.auth.FirebaseAuthException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -30,7 +30,7 @@ class SplashViewModel @Inject constructor(
   configurationService: ConfigurationService,
   private val accountService: AccountService,
   logService: LogService
-) : MakeItSoViewModel(logService) {
+) : ToDoListViewModel(logService) {
 
   val showError = mutableStateOf(false)
 

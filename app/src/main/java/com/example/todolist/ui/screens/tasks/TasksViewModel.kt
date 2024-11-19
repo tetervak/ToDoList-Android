@@ -20,7 +20,7 @@ import com.example.todolist.data.Task
 import com.example.todolist.data.service.ConfigurationService
 import com.example.todolist.data.service.LogService
 import com.example.todolist.data.service.StorageService
-import com.example.todolist.ui.screens.MakeItSoViewModel
+import com.example.todolist.ui.screens.ToDoListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -29,7 +29,7 @@ class TasksViewModel @Inject constructor(
   logService: LogService,
   private val storageService: StorageService,
   private val configurationService: ConfigurationService
-) : MakeItSoViewModel(logService) {
+) : ToDoListViewModel(logService) {
 
   val tasks = storageService.tasks
 

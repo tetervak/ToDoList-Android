@@ -19,7 +19,7 @@ package com.example.todolist.ui.screens.stats
 import androidx.compose.runtime.mutableStateOf
 import com.example.todolist.data.service.LogService
 import com.example.todolist.data.service.StorageService
-import com.example.todolist.ui.screens.MakeItSoViewModel
+import com.example.todolist.ui.screens.ToDoListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -27,7 +27,7 @@ import javax.inject.Inject
 class StatsViewModel @Inject constructor(
   logService: LogService,
   private val storageService: StorageService
-) : MakeItSoViewModel(logService) {
+) : ToDoListViewModel(logService) {
   val uiState = mutableStateOf(StatsUiState())
 
   init {

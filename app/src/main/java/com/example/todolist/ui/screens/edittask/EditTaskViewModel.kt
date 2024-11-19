@@ -23,7 +23,7 @@ import com.example.todolist.ui.common.ext.idFromParameter
 import com.example.todolist.data.Task
 import com.example.todolist.data.service.LogService
 import com.example.todolist.data.service.StorageService
-import com.example.todolist.ui.screens.MakeItSoViewModel
+import com.example.todolist.ui.screens.ToDoListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,7 +34,7 @@ class EditTaskViewModel @Inject constructor(
   savedStateHandle: SavedStateHandle,
   logService: LogService,
   private val storageService: StorageService,
-) : MakeItSoViewModel(logService) {
+) : ToDoListViewModel(logService) {
   val task = mutableStateOf(Task())
 
   init {

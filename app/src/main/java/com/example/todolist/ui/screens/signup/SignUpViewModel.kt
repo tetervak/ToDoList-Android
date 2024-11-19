@@ -24,7 +24,7 @@ import com.example.todolist.ui.common.ext.passwordMatches
 import com.example.todolist.ui.common.snackbar.SnackbarManager
 import com.example.todolist.data.service.AccountService
 import com.example.todolist.data.service.LogService
-import com.example.todolist.ui.screens.MakeItSoViewModel
+import com.example.todolist.ui.screens.ToDoListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -32,7 +32,7 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
   private val accountService: AccountService,
   logService: LogService
-) : MakeItSoViewModel(logService) {
+) : ToDoListViewModel(logService) {
   var uiState = mutableStateOf(SignUpUiState())
     private set
 
