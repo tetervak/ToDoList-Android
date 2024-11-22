@@ -66,7 +66,7 @@ fun ToDoListNavHost(
             TasksScreen(
                 onAddTask = { appState.navigate(EDIT_TASK_SCREEN) },
                 onEditTask = { taskId ->
-                    appState.navigate("$EDIT_TASK_SCREEN?$TASK_ID={${taskId}}")
+                    appState.navigate("$EDIT_TASK_SCREEN?$TASK_ID=${taskId}")
                 },
                 onStats = { appState.navigate(STATS_SCREEN) },
                 onSettings = { appState.navigate(SETTINGS_SCREEN) }

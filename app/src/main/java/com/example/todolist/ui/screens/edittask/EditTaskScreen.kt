@@ -103,65 +103,37 @@ fun EditTaskScreenContent(
     BasicField(AppText.url, task.url, onUrlChange, fieldModifier)
 
     Spacer(modifier = Modifier.spacer())
-    CardEditors(task, onDateChange, onTimeChange, activity)
-    CardSelectors(task, onPriorityChange, onFlagToggle)
+
+    RegularCardEditor(AppText.date, AppIcon.ic_calendar, task.dueDate, Modifier.card()) {
+      val picker = MaterialDatePicker.Builder.datePicker().build()
+      activity?.let {
+        picker.show(it.supportFragmentManager, picker.toString())
+        picker.addOnPositiveButtonClickListener { timeInMillis -> onDateChange(timeInMillis) }
+      }
+    }
+
+    RegularCardEditor(AppText.time, AppIcon.ic_clock, task.dueTime, Modifier.card()) {
+      val picker = MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build()
+
+      activity?.let {
+        picker.show(it.supportFragmentManager, picker.toString())
+        picker.addOnPositiveButtonClickListener { onTimeChange(picker.hour, picker.minute) }
+      }
+    }
+
+    val prioritySelection = Priority.getByName(task.priority).name
+    CardSelector(AppText.priority, Priority.getOptions(), prioritySelection, Modifier.card()) {
+        newValue ->
+      onPriorityChange(newValue)
+    }
+
+    val flagSelection = EditFlagOption.getByCheckedState(task.flag).name
+    CardSelector(AppText.flag, EditFlagOption.getOptions(), flagSelection, Modifier.card()) { newValue
+      ->
+      onFlagToggle(newValue)
+    }
 
     Spacer(modifier = Modifier.spacer())
-  }
-}
-
-@ExperimentalMaterial3Api
-@Composable
-private fun CardEditors(
-  task: Task,
-  onDateChange: (Long) -> Unit,
-  onTimeChange: (Int, Int) -> Unit,
-  activity: AppCompatActivity?
-) {
-  RegularCardEditor(AppText.date, AppIcon.ic_calendar, task.dueDate, Modifier.card()) {
-    showDatePicker(activity, onDateChange)
-  }
-
-  RegularCardEditor(AppText.time, AppIcon.ic_clock, task.dueTime, Modifier.card()) {
-    showTimePicker(activity, onTimeChange)
-  }
-}
-
-@Composable
-@ExperimentalMaterial3Api
-private fun CardSelectors(
-  task: Task,
-  onPriorityChange: (String) -> Unit,
-  onFlagToggle: (String) -> Unit
-) {
-  val prioritySelection = Priority.getByName(task.priority).name
-  CardSelector(AppText.priority, Priority.getOptions(), prioritySelection, Modifier.card()) {
-    newValue ->
-    onPriorityChange(newValue)
-  }
-
-  val flagSelection = EditFlagOption.getByCheckedState(task.flag).name
-  CardSelector(AppText.flag, EditFlagOption.getOptions(), flagSelection, Modifier.card()) { newValue
-    ->
-    onFlagToggle(newValue)
-  }
-}
-
-private fun showDatePicker(activity: AppCompatActivity?, onDateChange: (Long) -> Unit) {
-  val picker = MaterialDatePicker.Builder.datePicker().build()
-
-  activity?.let {
-    picker.show(it.supportFragmentManager, picker.toString())
-    picker.addOnPositiveButtonClickListener { timeInMillis -> onDateChange(timeInMillis) }
-  }
-}
-
-private fun showTimePicker(activity: AppCompatActivity?, onTimeChange: (Int, Int) -> Unit) {
-  val picker = MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build()
-
-  activity?.let {
-    picker.show(it.supportFragmentManager, picker.toString())
-    picker.addOnPositiveButtonClickListener { onTimeChange(picker.hour, picker.minute) }
   }
 }
 

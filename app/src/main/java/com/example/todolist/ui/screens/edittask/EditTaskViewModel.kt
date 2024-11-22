@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.example.todolist.ui.screens.edittask
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import com.example.todolist.ui.navigation.TASK_ID
@@ -41,7 +42,7 @@ class EditTaskViewModel @Inject constructor(
     val taskId = savedStateHandle.get<String>(TASK_ID)
     if (taskId != null) {
       launchCatching {
-        task.value = storageService.getTask(taskId.idFromParameter()) ?: Task()
+        task.value = storageService.getTask(taskId) ?: Task()
       }
     }
   }
