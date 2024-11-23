@@ -20,8 +20,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +35,6 @@ import com.example.todolist.R.drawable as AppIcon
 import com.example.todolist.R.string as AppText
 import com.example.todolist.ui.common.ext.card
 import com.example.todolist.ui.common.ext.spacer
-import com.example.todolist.ui.common.composable.BasicToolbar
 import com.example.todolist.ui.common.composable.DangerousCardEditor
 import com.example.todolist.ui.common.composable.DialogCancelButton
 import com.example.todolist.ui.common.composable.DialogConfirmButton
@@ -75,8 +77,15 @@ fun SettingsScreenContent(
       .verticalScroll(rememberScrollState()),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    BasicToolbar(AppText.settings)
-
+    CenterAlignedTopAppBar(
+      title = {
+        Text(text = stringResource(AppText.settings))
+      },
+      colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        titleContentColor = MaterialTheme.colorScheme.primary,
+      )
+    )
     Spacer(modifier = Modifier.spacer())
 
     if (uiState.isAnonymousAccount) {

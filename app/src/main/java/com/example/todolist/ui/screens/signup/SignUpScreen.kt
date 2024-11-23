@@ -19,9 +19,15 @@ package com.example.todolist.ui.screens.signup
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todolist.R.string as AppText
@@ -50,6 +56,7 @@ fun SignUpScreen(
   )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreenContent(
   modifier: Modifier = Modifier,
@@ -61,7 +68,15 @@ fun SignUpScreenContent(
 ) {
   val fieldModifier = Modifier.fieldModifier()
 
-  BasicToolbar(AppText.create_account)
+  CenterAlignedTopAppBar(
+    title = {
+      Text(text = stringResource(AppText.create_account))
+    },
+    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+      containerColor = MaterialTheme.colorScheme.primaryContainer,
+      titleContentColor = MaterialTheme.colorScheme.primary,
+    )
+  )
 
   Column(
     modifier = modifier

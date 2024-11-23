@@ -19,10 +19,16 @@ package com.example.todolist.ui.screens.login
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todolist.R.string as AppText
@@ -38,64 +44,74 @@ import com.example.todolist.ui.theme.ToDoListTheme
 
 @Composable
 fun LoginScreen(
-  onLoggedIn: () -> Unit,
-  viewModel: LoginViewModel = hiltViewModel()
+    onLoggedIn: () -> Unit,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
-  val uiState by viewModel.uiState
+    val uiState by viewModel.uiState
 
-  LoginScreenContent(
-    uiState = uiState,
-    onEmailChange = viewModel::onEmailChange,
-    onPasswordChange = viewModel::onPasswordChange,
-    onSignInClick = { viewModel.onSignInClick(onLoggedIn) },
-    onForgotPasswordClick = viewModel::onForgotPasswordClick
-  )
+    LoginScreenContent(
+        uiState = uiState,
+        onEmailChange = viewModel::onEmailChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onSignInClick = { viewModel.onSignInClick(onLoggedIn) },
+        onForgotPasswordClick = viewModel::onForgotPasswordClick
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreenContent(
-  modifier: Modifier = Modifier,
-  uiState: LoginUiState,
-  onEmailChange: (String) -> Unit,
-  onPasswordChange: (String) -> Unit,
-  onSignInClick: () -> Unit,
-  onForgotPasswordClick: () -> Unit
+    modifier: Modifier = Modifier,
+    uiState: LoginUiState,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onSignInClick: () -> Unit,
+    onForgotPasswordClick: () -> Unit
 ) {
-  BasicToolbar(AppText.login_details)
 
-  Column(
-    modifier = modifier
-      .fillMaxWidth()
-      .fillMaxHeight()
-      .verticalScroll(rememberScrollState()),
-    verticalArrangement = Arrangement.Center,
-    horizontalAlignment = Alignment.CenterHorizontally
-  ) {
-    EmailField(uiState.email, onEmailChange, Modifier.fieldModifier())
-    PasswordField(uiState.password, onPasswordChange, Modifier.fieldModifier())
+    CenterAlignedTopAppBar(
+        title = {
+            Text(text = stringResource(AppText.login_details))
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            titleContentColor = MaterialTheme.colorScheme.primary,
+        )
+    )
 
-    BasicButton(AppText.sign_in, Modifier.basicButton()) { onSignInClick() }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        EmailField(uiState.email, onEmailChange, Modifier.fieldModifier())
+        PasswordField(uiState.password, onPasswordChange, Modifier.fieldModifier())
 
-    BasicTextButton(AppText.forgot_password, Modifier.textButton()) {
-      onForgotPasswordClick()
+        BasicButton(AppText.sign_in, Modifier.basicButton()) { onSignInClick() }
+
+        BasicTextButton(AppText.forgot_password, Modifier.textButton()) {
+            onForgotPasswordClick()
+        }
     }
-  }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-  val uiState = LoginUiState(
-    email = "email@test.com"
-  )
-
-  ToDoListTheme {
-    LoginScreenContent(
-      uiState = uiState,
-      onEmailChange = { },
-      onPasswordChange = { },
-      onSignInClick = { },
-      onForgotPasswordClick = { }
+    val uiState = LoginUiState(
+        email = "email@test.com"
     )
-  }
+
+    ToDoListTheme {
+        LoginScreenContent(
+            uiState = uiState,
+            onEmailChange = { },
+            onPasswordChange = { },
+            onSignInClick = { },
+            onForgotPasswordClick = { }
+        )
+    }
 }
