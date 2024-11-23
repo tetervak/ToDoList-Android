@@ -24,7 +24,7 @@ data class Task(
   @DocumentId val id: String = "",
   @ServerTimestamp val createdAt: Date = Date(),
   val title: String = "",
-  val priority: String = "",
+  val priority: String = "None",
   val dueDate: String = "",
   val dueTime: String = "",
   val description: String = "",

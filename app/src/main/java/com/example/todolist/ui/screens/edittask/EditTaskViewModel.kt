@@ -16,11 +16,10 @@ limitations under the License.
 
 package com.example.todolist.ui.screens.edittask
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
+import com.example.todolist.data.Priority
 import com.example.todolist.ui.navigation.TASK_ID
-import com.example.todolist.ui.common.ext.idFromParameter
 import com.example.todolist.data.Task
 import com.example.todolist.data.service.LogService
 import com.example.todolist.data.service.StorageService
@@ -74,13 +73,12 @@ class EditTaskViewModel @Inject constructor(
     task.value = task.value.copy(dueTime = newDueTime)
   }
 
-  fun onFlagToggle(newValue: String) {
-    val newFlagOption = EditFlagOption.getBooleanValue(newValue)
-    task.value = task.value.copy(flag = newFlagOption)
+  fun onFlagToggle(newValue: Boolean) {
+    task.value = task.value.copy(flag = newValue)
   }
 
-  fun onPriorityChange(newValue: String) {
-    task.value = task.value.copy(priority = newValue)
+  fun onPriorityChange(newValue: Priority) {
+    task.value = task.value.copy(priority = newValue.toString())
   }
 
   fun onDoneClick(popUpScreen: () -> Unit) {

@@ -49,7 +49,7 @@ fun DropdownContextMenu(
         ) {
             val options = stringArrayResource(R.array.task_action_options)
 
-            options.forEachIndexed { index,selectionOption, ->
+            options.forEachIndexed { index, selectionOption ->
                 DropdownMenuItem(
                     onClick = {
                         isExpanded = false
