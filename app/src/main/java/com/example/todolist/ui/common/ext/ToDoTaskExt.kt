@@ -25,3 +25,7 @@ fun ToDoTask?.hasDueDate(): Boolean {
 fun ToDoTask?.hasDueTime(): Boolean {
   return this?.dueTime.orEmpty().isNotBlank()
 }
+
+fun ToDoTask?.hasDueDateOrTime(): Boolean {
+  return hasDueDate() || hasDueTime()
+}

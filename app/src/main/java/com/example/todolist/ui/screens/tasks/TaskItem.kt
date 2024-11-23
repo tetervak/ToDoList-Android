@@ -35,6 +35,7 @@ import com.example.todolist.ui.common.ext.contextMenu
 import com.example.todolist.ui.common.ext.hasDueDate
 import com.example.todolist.ui.common.ext.hasDueTime
 import com.example.todolist.data.ToDoTask
+import com.example.todolist.ui.common.ext.hasDueDateOrTime
 import com.example.todolist.ui.theme.DarkOrange
 import java.lang.StringBuilder
 
@@ -60,9 +61,13 @@ fun TaskItem(
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 0.dp)
       )
 
-      Column(modifier = Modifier.weight(1f)) {
-        Text(text = toDoTask.title, style = MaterialTheme.typography.titleSmall)
-        Text(text = getDueDateAndTime(toDoTask), fontSize = 12.sp)
+      if(toDoTask.hasDueDateOrTime()){
+        Column(modifier = Modifier.weight(1f)) {
+          Text(text = toDoTask.title, style = MaterialTheme.typography.titleSmall)
+          Text(text = getDueDateAndTime(toDoTask), fontSize = 12.sp)
+        }
+      }else{
+        Text(text = toDoTask.title, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
       }
 
       if (toDoTask.flag) {
