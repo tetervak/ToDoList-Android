@@ -17,7 +17,7 @@ limitations under the License.
 package com.example.todolist.data.service.impl
 
 import com.example.todolist.data.Priority
-import com.example.todolist.data.Task
+import com.example.todolist.data.ToDoTask
 import com.example.todolist.data.service.AccountService
 import com.example.todolist.data.service.StorageService
 import com.google.firebase.firestore.AggregateSource
@@ -41,7 +41,7 @@ class StorageServiceImpl @Inject constructor(
     .whereEqualTo(USER_ID_FIELD, auth.currentUserId)
 
   @OptIn(ExperimentalCoroutinesApi::class)
-  override val tasks: Flow<List<Task>>
+  override val tasks: Flow<List<ToDoTask>>
     get() =
       auth.currentUser.flatMapLatest { user ->
         firestore
@@ -51,21 +51,21 @@ class StorageServiceImpl @Inject constructor(
           .dataObjects()
       }
 
-  override suspend fun getTask(taskId: String): Task? =
+  override suspend fun getTask(taskId: String): ToDoTask? =
     firestore.collection(TASK_COLLECTION).document(taskId)
       .get()
       .await()
       .toObject()
 
-  override suspend fun save(task: Task): String =
+  override suspend fun save(toDoTask: ToDoTask): String =
     trace(SAVE_TASK_TRACE) {
-     val updatedTask = task.copy(userId = auth.currentUserId)
+     val updatedTask = toDoTask.copy(userId = auth.currentUserId)
       firestore.collection(TASK_COLLECTION).add(updatedTask).await().id
     }
 
-  override suspend fun update(task: Task): Unit =
+  override suspend fun update(toDoTask: ToDoTask): Unit =
     trace(UPDATE_TASK_TRACE) {
-      firestore.collection(TASK_COLLECTION).document(task.id).set(task).await()
+      firestore.collection(TASK_COLLECTION).document(toDoTask.id).set(toDoTask).await()
     }
 
   override suspend fun delete(taskId: String) {

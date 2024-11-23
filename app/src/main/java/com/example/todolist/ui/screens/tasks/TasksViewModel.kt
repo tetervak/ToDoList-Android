@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.example.todolist.ui.screens.tasks
 
-import com.example.todolist.data.Task
+import com.example.todolist.data.ToDoTask
 import com.example.todolist.data.service.ConfigurationService
 import com.example.todolist.data.service.LogService
 import com.example.todolist.data.service.StorageService
@@ -32,14 +32,14 @@ class TasksViewModel @Inject constructor(
   private val configurationService: ConfigurationService
 ) : ToDoListViewModel(logService) {
 
-  val tasks: Flow<List<Task>> = storageService.tasks
+  val tasks: Flow<List<ToDoTask>> = storageService.tasks
 
-  fun onTaskCheckChange(task: Task) {
-    launchCatching { storageService.update(task.copy(completed = !task.completed)) }
+  fun onTaskCheckChange(toDoTask: ToDoTask) {
+    launchCatching { storageService.update(toDoTask.copy(completed = !toDoTask.completed)) }
   }
 
-  fun onToggleFlag(task: Task) {
-    launchCatching { storageService.update(task.copy(flag = !task.flag)) }
+  fun onToggleFlag(toDoTask: ToDoTask) {
+    launchCatching { storageService.update(toDoTask.copy(flag = !toDoTask.flag)) }
   }
 
   fun onDeleteTask(id: String) {

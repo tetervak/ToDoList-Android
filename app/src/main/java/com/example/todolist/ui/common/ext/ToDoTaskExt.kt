@@ -16,12 +16,12 @@ limitations under the License.
 
 package com.example.todolist.ui.common.ext
 
-import com.example.todolist.data.Task
+import com.example.todolist.data.ToDoTask
 
-fun Task?.hasDueDate(): Boolean {
+fun ToDoTask?.hasDueDate(): Boolean {
   return this?.dueDate.orEmpty().isNotBlank()
 }
 
-fun Task?.hasDueTime(): Boolean {
+fun ToDoTask?.hasDueTime(): Boolean {
   return this?.dueTime.orEmpty().isNotBlank()
 }

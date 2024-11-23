@@ -21,7 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import com.example.todolist.data.Priority
 import com.example.todolist.ui.navigation.TASK_ID
-import com.example.todolist.data.Task
+import com.example.todolist.data.ToDoTask
 import com.example.todolist.data.service.LogService
 import com.example.todolist.data.service.StorageService
 import com.example.todolist.ui.screens.ToDoListViewModel
@@ -37,27 +37,27 @@ class EditTaskViewModel @Inject constructor(
   private val storageService: StorageService,
 ) : ToDoListViewModel(logService) {
 
-  val task: MutableState<Task> = mutableStateOf(Task())
+  val toDoTask: MutableState<ToDoTask> = mutableStateOf(ToDoTask())
 
   init {
     val taskId = savedStateHandle.get<String>(TASK_ID)
     if (taskId != null) {
       launchCatching {
-        task.value = storageService.getTask(taskId) ?: Task()
+        toDoTask.value = storageService.getTask(taskId) ?: ToDoTask()
       }
     }
   }
 
   fun onTitleChange(newValue: String) {
-    task.value = task.value.copy(title = newValue)
+    toDoTask.value = toDoTask.value.copy(title = newValue)
   }
 
   fun onDescriptionChange(newValue: String) {
-    task.value = task.value.copy(description = newValue)
+    toDoTask.value = toDoTask.value.copy(description = newValue)
   }
 
   fun onUrlChange(newValue: String) {
-    task.value = task.value.copy(url = newValue)
+    toDoTask.value = toDoTask.value.copy(url = newValue)
   }
 
   fun onDateChange(newValue: Long) {
@@ -67,25 +67,25 @@ class EditTaskViewModel @Inject constructor(
     calendar.add(Calendar.MILLISECOND, -offset)
     calendar.timeZone = TimeZone.getDefault()
     val newDueDate = SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH).format(calendar.time)
-    task.value = task.value.copy(dueDate = newDueDate)
+    toDoTask.value = toDoTask.value.copy(dueDate = newDueDate)
   }
 
   fun onTimeChange(hour: Int, minute: Int) {
     val newDueTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
-    task.value = task.value.copy(dueTime = newDueTime)
+    toDoTask.value = toDoTask.value.copy(dueTime = newDueTime)
   }
 
   fun onFlagToggle(newValue: Boolean) {
-    task.value = task.value.copy(flag = newValue)
+    toDoTask.value = toDoTask.value.copy(flag = newValue)
   }
 
   fun onPriorityChange(newValue: Priority) {
-    task.value = task.value.copy(priority = newValue.toString())
+    toDoTask.value = toDoTask.value.copy(priority = newValue.toString())
   }
 
   fun onDoneClick(popUpScreen: () -> Unit) {
     launchCatching {
-      val editedTask = task.value
+      val editedTask = toDoTask.value
       if (editedTask.id.isBlank()) {
         storageService.save(editedTask)
       } else {

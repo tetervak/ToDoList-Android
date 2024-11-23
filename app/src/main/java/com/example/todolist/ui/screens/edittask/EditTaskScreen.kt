@@ -53,7 +53,7 @@ import com.example.todolist.ui.common.ext.card
 import com.example.todolist.ui.common.ext.fieldModifier
 import com.example.todolist.ui.common.ext.spacer
 import com.example.todolist.data.Priority
-import com.example.todolist.data.Task
+import com.example.todolist.data.ToDoTask
 import com.example.todolist.ui.common.composable.BasicField
 import com.example.todolist.ui.common.composable.RegularCardEditor
 import com.example.todolist.ui.theme.ToDoListTheme
@@ -67,11 +67,11 @@ fun EditTaskScreen(
     popUpScreen: () -> Unit,
     viewModel: EditTaskViewModel = hiltViewModel()
 ) {
-    val task by viewModel.task
+    val task by viewModel.toDoTask
     val activity = LocalContext.current as AppCompatActivity
 
     EditTaskScreenContent(
-        task = task,
+        toDoTask = task,
         onDoneClick = { viewModel.onDoneClick(popUpScreen) },
         onTitleChange = viewModel::onTitleChange,
         onDescriptionChange = viewModel::onDescriptionChange,
@@ -88,7 +88,7 @@ fun EditTaskScreen(
 @ExperimentalMaterial3Api
 fun EditTaskScreenContent(
     modifier: Modifier = Modifier,
-    task: Task,
+    toDoTask: ToDoTask,
     onDoneClick: () -> Unit,
     onTitleChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
@@ -129,13 +129,13 @@ fun EditTaskScreenContent(
     Spacer(modifier = Modifier.spacer())
 
     val fieldModifier = Modifier.fieldModifier()
-    BasicField(AppText.title, task.title, onTitleChange, fieldModifier)
-    BasicField(AppText.description, task.description, onDescriptionChange, fieldModifier)
-    BasicField(AppText.url, task.url, onUrlChange, fieldModifier)
+    BasicField(AppText.title, toDoTask.title, onTitleChange, fieldModifier)
+    BasicField(AppText.description, toDoTask.description, onDescriptionChange, fieldModifier)
+    BasicField(AppText.url, toDoTask.url, onUrlChange, fieldModifier)
 
     Spacer(modifier = Modifier.spacer())
 
-    RegularCardEditor(AppText.date, AppIcon.ic_calendar, task.dueDate, Modifier.card()) {
+    RegularCardEditor(AppText.date, AppIcon.ic_calendar, toDoTask.dueDate, Modifier.card()) {
         val picker = MaterialDatePicker.Builder.datePicker().build()
         activity?.let {
             picker.show(it.supportFragmentManager, picker.toString())
@@ -143,7 +143,7 @@ fun EditTaskScreenContent(
         }
     }
 
-    RegularCardEditor(AppText.time, AppIcon.ic_clock, task.dueTime, Modifier.card()) {
+    RegularCardEditor(AppText.time, AppIcon.ic_clock, toDoTask.dueTime, Modifier.card()) {
         val picker = MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build()
 
         activity?.let {
@@ -154,13 +154,13 @@ fun EditTaskScreenContent(
 
     PrioritySelector(
         AppText.priority,
-        Priority.valueOf(task.priority),
+        Priority.valueOf(toDoTask.priority),
         Modifier.card()
     ) { newValue ->
         onPriorityChange(newValue)
     }
 
-    FlagSelector(AppText.flag, task.flag, Modifier.card()) { newValue ->
+    FlagSelector(AppText.flag, toDoTask.flag, Modifier.card()) { newValue ->
         onFlagToggle(newValue)
     }
 
@@ -172,7 +172,7 @@ fun EditTaskScreenContent(
 @ExperimentalMaterial3Api
 @Composable
 fun EditTaskScreenPreview() {
-    val task = Task(
+    val toDoTask = ToDoTask(
         title = "Task title",
         description = "Task description",
         flag = true
@@ -180,7 +180,7 @@ fun EditTaskScreenPreview() {
 
     ToDoListTheme {
         EditTaskScreenContent(
-            task = task,
+            toDoTask = toDoTask,
             onDoneClick = { },
             onTitleChange = { },
             onDescriptionChange = { },

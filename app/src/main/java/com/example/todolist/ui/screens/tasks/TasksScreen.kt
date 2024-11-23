@@ -41,7 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.todolist.R.drawable as AppIcon
 import com.example.todolist.R.string as AppText
-import com.example.todolist.data.Task
+import com.example.todolist.data.ToDoTask
 import com.example.todolist.ui.theme.ToDoListTheme
 
 @Composable
@@ -53,10 +53,10 @@ fun TasksScreen(
     onSettings: () -> Unit,
     viewModel: TasksViewModel = hiltViewModel()
 ) {
-    val tasks: State<List<Task>> = viewModel.tasks.collectAsStateWithLifecycle(emptyList())
+    val tasks: State<List<ToDoTask>> = viewModel.tasks.collectAsStateWithLifecycle(emptyList())
 
     TasksScreenContent(
-        tasks = tasks.value,
+        toDoTasks = tasks.value,
         onAddTask = onAddTask,
         onCheckChange = viewModel::onTaskCheckChange,
         onEditTask = onEditTask,
@@ -72,11 +72,11 @@ fun TasksScreen(
 @ExperimentalMaterial3Api
 fun TasksScreenContent(
     modifier: Modifier = Modifier,
-    tasks: List<Task>,
+    toDoTasks: List<ToDoTask>,
     onAddTask: () -> Unit,
-    onCheckChange: (Task) -> Unit,
+    onCheckChange: (ToDoTask) -> Unit,
     onEditTask: (String) -> Unit,
-    onToggleFlag: (Task) -> Unit,
+    onToggleFlag: (ToDoTask) -> Unit,
     onDeleteTask: (String) -> Unit,
     onStats: () -> Unit,
     onSettings: () -> Unit,
@@ -127,9 +127,9 @@ fun TasksScreenContent(
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
-            items(tasks, key = { it.id }) { taskItem ->
+            items(toDoTasks, key = { it.id }) { taskItem ->
                 TaskItem(
-                    task = taskItem,
+                    toDoTask = taskItem,
                     onCheckChange = { onCheckChange(taskItem) },
                     onTaskAction = { option: TaskActionOption ->
                         when (option) {
@@ -150,8 +150,8 @@ fun TasksScreenContent(
 fun TasksScreenPreview() {
     ToDoListTheme {
         TasksScreenContent(
-            tasks = listOf(
-                Task(
+            toDoTasks = listOf(
+                ToDoTask(
                     title = "Test",
                     completed = true,
                     flag = true

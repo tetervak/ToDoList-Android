@@ -34,14 +34,14 @@ import com.example.todolist.R.drawable as AppIcon
 import com.example.todolist.ui.common.ext.contextMenu
 import com.example.todolist.ui.common.ext.hasDueDate
 import com.example.todolist.ui.common.ext.hasDueTime
-import com.example.todolist.data.Task
+import com.example.todolist.data.ToDoTask
 import com.example.todolist.ui.theme.DarkOrange
 import java.lang.StringBuilder
 
 @Composable
 @ExperimentalMaterial3Api
 fun TaskItem(
-  task: Task,
+  toDoTask: ToDoTask,
   onCheckChange: () -> Unit,
   onTaskAction: (TaskActionOption) -> Unit,
 ) {
@@ -55,17 +55,17 @@ fun TaskItem(
       modifier = Modifier.padding(8.dp).fillMaxWidth(),
     ) {
       Checkbox(
-        checked = task.completed,
+        checked = toDoTask.completed,
         onCheckedChange = { onCheckChange() },
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 0.dp)
       )
 
       Column(modifier = Modifier.weight(1f)) {
-        Text(text = task.title, style = MaterialTheme.typography.titleSmall)
-        Text(text = getDueDateAndTime(task), fontSize = 12.sp)
+        Text(text = toDoTask.title, style = MaterialTheme.typography.titleSmall)
+        Text(text = getDueDateAndTime(toDoTask), fontSize = 12.sp)
       }
 
-      if (task.flag) {
+      if (toDoTask.flag) {
         Icon(
           painter = painterResource(AppIcon.ic_flag),
           tint = DarkOrange,
@@ -81,17 +81,17 @@ fun TaskItem(
   }
 }
 
-private fun getDueDateAndTime(task: Task): String {
+private fun getDueDateAndTime(toDoTask: ToDoTask): String {
   val stringBuilder = StringBuilder("")
 
-  if (task.hasDueDate()) {
-    stringBuilder.append(task.dueDate)
+  if (toDoTask.hasDueDate()) {
+    stringBuilder.append(toDoTask.dueDate)
     stringBuilder.append(" ")
   }
 
-  if (task.hasDueTime()) {
+  if (toDoTask.hasDueTime()) {
     stringBuilder.append("at ")
-    stringBuilder.append(task.dueTime)
+    stringBuilder.append(toDoTask.dueTime)
   }
 
   return stringBuilder.toString()

@@ -20,7 +20,7 @@ import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.Date
 
-data class Task(
+data class ToDoTask(
   @DocumentId val id: String = "",
   @ServerTimestamp val createdAt: Date = Date(),
   val title: String = "",
