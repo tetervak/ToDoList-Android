@@ -22,21 +22,26 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,10 +52,8 @@ import com.example.todolist.R.string as AppText
 import com.example.todolist.ui.common.ext.card
 import com.example.todolist.ui.common.ext.fieldModifier
 import com.example.todolist.ui.common.ext.spacer
-import com.example.todolist.ui.common.ext.toolbarActions
 import com.example.todolist.data.Priority
 import com.example.todolist.data.Task
-import com.example.todolist.ui.common.composable.ActionToolbar
 import com.example.todolist.ui.common.composable.BasicField
 import com.example.todolist.ui.common.composable.RegularCardEditor
 import com.example.todolist.ui.theme.ToDoListTheme
@@ -61,54 +64,67 @@ import com.google.android.material.timepicker.TimeFormat
 @Composable
 @ExperimentalMaterial3Api
 fun EditTaskScreen(
-  popUpScreen: () -> Unit,
-  viewModel: EditTaskViewModel = hiltViewModel()
+    popUpScreen: () -> Unit,
+    viewModel: EditTaskViewModel = hiltViewModel()
 ) {
-  val task by viewModel.task
-  val activity = LocalContext.current as AppCompatActivity
+    val task by viewModel.task
+    val activity = LocalContext.current as AppCompatActivity
 
-  EditTaskScreenContent(
-    task = task,
-    onDoneClick = { viewModel.onDoneClick(popUpScreen) },
-    onTitleChange = viewModel::onTitleChange,
-    onDescriptionChange = viewModel::onDescriptionChange,
-    onUrlChange = viewModel::onUrlChange,
-    onDateChange = viewModel::onDateChange,
-    onTimeChange = viewModel::onTimeChange,
-    onPriorityChange = viewModel::onPriorityChange,
-    onFlagToggle = viewModel::onFlagToggle,
-    activity = activity
-  )
+    EditTaskScreenContent(
+        task = task,
+        onDoneClick = { viewModel.onDoneClick(popUpScreen) },
+        onTitleChange = viewModel::onTitleChange,
+        onDescriptionChange = viewModel::onDescriptionChange,
+        onUrlChange = viewModel::onUrlChange,
+        onDateChange = viewModel::onDateChange,
+        onTimeChange = viewModel::onTimeChange,
+        onPriorityChange = viewModel::onPriorityChange,
+        onFlagToggle = viewModel::onFlagToggle,
+        activity = activity
+    )
 }
 
 @Composable
 @ExperimentalMaterial3Api
 fun EditTaskScreenContent(
-  modifier: Modifier = Modifier,
-  task: Task,
-  onDoneClick: () -> Unit,
-  onTitleChange: (String) -> Unit,
-  onDescriptionChange: (String) -> Unit,
-  onUrlChange: (String) -> Unit,
-  onDateChange: (Long) -> Unit,
-  onTimeChange: (Int, Int) -> Unit,
-  onPriorityChange: (Priority) -> Unit,
-  onFlagToggle: (Boolean) -> Unit,
-  activity: AppCompatActivity?
+    modifier: Modifier = Modifier,
+    task: Task,
+    onDoneClick: () -> Unit,
+    onTitleChange: (String) -> Unit,
+    onDescriptionChange: (String) -> Unit,
+    onUrlChange: (String) -> Unit,
+    onDateChange: (Long) -> Unit,
+    onTimeChange: (Int, Int) -> Unit,
+    onPriorityChange: (Priority) -> Unit,
+    onFlagToggle: (Boolean) -> Unit,
+    activity: AppCompatActivity?
 ) {
-  Column(
-    modifier = modifier
-      .fillMaxWidth()
-      .fillMaxHeight()
-      .verticalScroll(rememberScrollState()),
-    horizontalAlignment = Alignment.CenterHorizontally
-  ) {
-    ActionToolbar(
-      title = AppText.edit_task,
-      modifier = Modifier.toolbarActions(),
-      primaryActionIcon = AppIcon.ic_check,
-      primaryAction = { onDoneClick() }
-    )
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CenterAlignedTopAppBar(
+            title = {
+                Text(text = stringResource(AppText.edit_task))
+            },
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                titleContentColor = MaterialTheme.colorScheme.primary,
+            ),
+            actions = {
+                IconButton(
+                    onClick = onDoneClick
+                ) {
+                    Icon(
+                        painter = painterResource(AppIcon.ic_check),
+                        contentDescription = stringResource(AppText.ok)
+                    )
+                }
+            }
+        )
 
     Spacer(modifier = Modifier.spacer())
 
@@ -120,185 +136,193 @@ fun EditTaskScreenContent(
     Spacer(modifier = Modifier.spacer())
 
     RegularCardEditor(AppText.date, AppIcon.ic_calendar, task.dueDate, Modifier.card()) {
-      val picker = MaterialDatePicker.Builder.datePicker().build()
-      activity?.let {
-        picker.show(it.supportFragmentManager, picker.toString())
-        picker.addOnPositiveButtonClickListener { timeInMillis -> onDateChange(timeInMillis) }
-      }
+        val picker = MaterialDatePicker.Builder.datePicker().build()
+        activity?.let {
+            picker.show(it.supportFragmentManager, picker.toString())
+            picker.addOnPositiveButtonClickListener { timeInMillis -> onDateChange(timeInMillis) }
+        }
     }
 
     RegularCardEditor(AppText.time, AppIcon.ic_clock, task.dueTime, Modifier.card()) {
-      val picker = MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build()
+        val picker = MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build()
 
-      activity?.let {
-        picker.show(it.supportFragmentManager, picker.toString())
-        picker.addOnPositiveButtonClickListener { onTimeChange(picker.hour, picker.minute) }
-      }
+        activity?.let {
+            picker.show(it.supportFragmentManager, picker.toString())
+            picker.addOnPositiveButtonClickListener { onTimeChange(picker.hour, picker.minute) }
+        }
     }
 
-    PrioritySelector(AppText.priority, Priority.valueOf(task.priority), Modifier.card()) { newValue ->
-      onPriorityChange(newValue)
+    PrioritySelector(
+        AppText.priority,
+        Priority.valueOf(task.priority),
+        Modifier.card()
+    ) { newValue ->
+        onPriorityChange(newValue)
     }
 
     FlagSelector(AppText.flag, task.flag, Modifier.card()) { newValue ->
-      onFlagToggle(newValue)
+        onFlagToggle(newValue)
     }
 
     Spacer(modifier = Modifier.spacer())
-  }
+}
 }
 
 @Preview(showBackground = true)
 @ExperimentalMaterial3Api
 @Composable
 fun EditTaskScreenPreview() {
-  val task = Task(
-    title = "Task title",
-    description = "Task description",
-    flag = true
-  )
-
-  ToDoListTheme {
-    EditTaskScreenContent(
-      task = task,
-      onDoneClick = { },
-      onTitleChange = { },
-      onDescriptionChange = { },
-      onUrlChange = { },
-      onDateChange = { },
-      onTimeChange = { _, _ -> },
-      onPriorityChange = { },
-      onFlagToggle = { },
-      activity = null
+    val task = Task(
+        title = "Task title",
+        description = "Task description",
+        flag = true
     )
-  }
+
+    ToDoListTheme {
+        EditTaskScreenContent(
+            task = task,
+            onDoneClick = { },
+            onTitleChange = { },
+            onDescriptionChange = { },
+            onUrlChange = { },
+            onDateChange = { },
+            onTimeChange = { _, _ -> },
+            onPriorityChange = { },
+            onFlagToggle = { },
+            activity = null
+        )
+    }
 }
 
 @Composable
 @ExperimentalMaterial3Api
 private fun FlagSelector(
-  @StringRes label: Int,
-  flag: Boolean,
-  modifier: Modifier,
-  onNewValue: (Boolean) -> Unit
+    @StringRes label: Int,
+    flag: Boolean,
+    modifier: Modifier,
+    onNewValue: (Boolean) -> Unit
 ) {
-  OutlinedCard(
-    colors = CardColors(
-      containerColor = MaterialTheme.colorScheme.surface,
-      contentColor = MaterialTheme.colorScheme.onSurface,
-      disabledContainerColor = MaterialTheme.colorScheme.surface,
-      disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
-    ),
-    modifier = modifier
-  ) {
-    var isExpanded by remember { mutableStateOf(false) }
-
-    ExposedDropdownMenuBox(
-      expanded = isExpanded,
-      modifier = Modifier,
-      onExpandedChange = { isExpanded = it }
+    OutlinedCard(
+        colors = CardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+            disabledContainerColor = MaterialTheme.colorScheme.surface,
+            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+        ),
+        modifier = modifier
     ) {
-      TextField(
-        modifier = Modifier.fillMaxWidth().menuAnchor(type = MenuAnchorType.PrimaryNotEditable),
-        readOnly = true,
-        value = if (flag) stringResource(R.string.flag_on) else stringResource(R.string.flag_off),
-        onValueChange = {},
-        label = { Text(stringResource(label)) },
-        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(isExpanded) },
-        colors = dropdownColors()
-      )
+        var isExpanded by remember { mutableStateOf(false) }
 
-      ExposedDropdownMenu(
-        expanded = isExpanded,
-        onDismissRequest = { isExpanded = false },
-        containerColor = MaterialTheme.colorScheme.surface
-      ) {
-        DropdownMenuItem(
-          onClick = {
-            onNewValue(true)
-            isExpanded = false
-          },
-          text = { Text(text = stringResource(R.string.flag_on)) }
-        )
-        DropdownMenuItem(
-          onClick = {
-            onNewValue(false)
-            isExpanded = false
-          },
-          text = { Text(text = stringResource(R.string.flag_off)) }
-        )
-      }
+        ExposedDropdownMenuBox(
+            expanded = isExpanded,
+            modifier = Modifier,
+            onExpandedChange = { isExpanded = it }
+        ) {
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(type = MenuAnchorType.PrimaryNotEditable),
+                readOnly = true,
+                value = if (flag) stringResource(R.string.flag_on) else stringResource(R.string.flag_off),
+                onValueChange = {},
+                label = { Text(stringResource(label)) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(isExpanded) },
+                colors = dropdownColors()
+            )
+
+            ExposedDropdownMenu(
+                expanded = isExpanded,
+                onDismissRequest = { isExpanded = false },
+                containerColor = MaterialTheme.colorScheme.surface
+            ) {
+                DropdownMenuItem(
+                    onClick = {
+                        onNewValue(true)
+                        isExpanded = false
+                    },
+                    text = { Text(text = stringResource(R.string.flag_on)) }
+                )
+                DropdownMenuItem(
+                    onClick = {
+                        onNewValue(false)
+                        isExpanded = false
+                    },
+                    text = { Text(text = stringResource(R.string.flag_off)) }
+                )
+            }
+        }
     }
-  }
 }
 
 @Composable
 @ExperimentalMaterial3Api
 private fun PrioritySelector(
-  @StringRes label: Int,
-  priority: Priority,
-  modifier: Modifier,
-  onNewValue: (Priority) -> Unit
+    @StringRes label: Int,
+    priority: Priority,
+    modifier: Modifier,
+    onNewValue: (Priority) -> Unit
 ) {
 
     val options = stringArrayResource(R.array.task_priority_options)
 
-  OutlinedCard(
-    colors = CardColors(
-      containerColor = MaterialTheme.colorScheme.surface,
-      contentColor = MaterialTheme.colorScheme.onSurface,
-      disabledContainerColor = MaterialTheme.colorScheme.surface,
-      disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
-    ),
-    modifier = modifier
-  ) {
-    var isExpanded by remember { mutableStateOf(false) }
-
-    ExposedDropdownMenuBox(
-      expanded = isExpanded,
-      modifier = Modifier,
-      onExpandedChange = { isExpanded = it }
+    OutlinedCard(
+        colors = CardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+            disabledContainerColor = MaterialTheme.colorScheme.surface,
+            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+        ),
+        modifier = modifier
     ) {
-      TextField(
-        modifier = Modifier.fillMaxWidth().menuAnchor(type = MenuAnchorType.PrimaryNotEditable),
-        readOnly = true,
-        value = options[priority.ordinal],
-        onValueChange = {},
-        label = { Text(stringResource(label)) },
-        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(isExpanded) },
-        colors = dropdownColors()
-      )
+        var isExpanded by remember { mutableStateOf(false) }
 
-      ExposedDropdownMenu(
-        expanded = isExpanded,
-        onDismissRequest = { isExpanded = false },
-        containerColor = MaterialTheme.colorScheme.surface
-      ) {
-        options.forEachIndexed { index, selectionOption ->
-          DropdownMenuItem(
-            onClick = {
-              onNewValue(Priority.entries[index])
-              isExpanded = false
-            },
-            text = { Text(text = selectionOption) }
-          )
+        ExposedDropdownMenuBox(
+            expanded = isExpanded,
+            modifier = Modifier,
+            onExpandedChange = { isExpanded = it }
+        ) {
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(type = MenuAnchorType.PrimaryNotEditable),
+                readOnly = true,
+                value = options[priority.ordinal],
+                onValueChange = {},
+                label = { Text(stringResource(label)) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(isExpanded) },
+                colors = dropdownColors()
+            )
+
+            ExposedDropdownMenu(
+                expanded = isExpanded,
+                onDismissRequest = { isExpanded = false },
+                containerColor = MaterialTheme.colorScheme.surface
+            ) {
+                options.forEachIndexed { index, selectionOption ->
+                    DropdownMenuItem(
+                        onClick = {
+                            onNewValue(Priority.entries[index])
+                            isExpanded = false
+                        },
+                        text = { Text(text = selectionOption) }
+                    )
+                }
+            }
         }
-      }
     }
-  }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun dropdownColors(): TextFieldColors {
-  return ExposedDropdownMenuDefaults.textFieldColors(
-    focusedContainerColor = MaterialTheme.colorScheme.surface,
-    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-    focusedIndicatorColor = Color.Transparent,
-    unfocusedIndicatorColor = Color.Transparent,
-    unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
-    focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
-    focusedLabelColor = MaterialTheme.colorScheme.primary,
-    unfocusedLabelColor = MaterialTheme.colorScheme.primary
-  )
+    return ExposedDropdownMenuDefaults.textFieldColors(
+        focusedContainerColor = MaterialTheme.colorScheme.surface,
+        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+        focusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent,
+        unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+        focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+        focusedLabelColor = MaterialTheme.colorScheme.primary,
+        unfocusedLabelColor = MaterialTheme.colorScheme.primary
+    )
 }

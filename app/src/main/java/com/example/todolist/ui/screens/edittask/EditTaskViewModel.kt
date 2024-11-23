@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.example.todolist.ui.screens.edittask
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import com.example.todolist.data.Priority
@@ -35,7 +36,8 @@ class EditTaskViewModel @Inject constructor(
   logService: LogService,
   private val storageService: StorageService,
 ) : ToDoListViewModel(logService) {
-  val task = mutableStateOf(Task())
+
+  val task: MutableState<Task> = mutableStateOf(Task())
 
   init {
     val taskId = savedStateHandle.get<String>(TASK_ID)
