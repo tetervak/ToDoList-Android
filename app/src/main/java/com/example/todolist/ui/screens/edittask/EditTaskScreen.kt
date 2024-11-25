@@ -17,7 +17,6 @@ limitations under the License.
 package com.example.todolist.ui.screens.edittask
 
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -34,15 +33,11 @@ import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,11 +50,7 @@ import com.example.todolist.ui.common.ext.spacer
 import com.example.todolist.data.Priority
 import com.example.todolist.data.ToDoTask
 import com.example.todolist.ui.common.composable.BasicField
-import com.example.todolist.ui.common.composable.RegularCardEditor
 import com.example.todolist.ui.theme.ToDoListTheme
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat
 
 @Composable
 @ExperimentalMaterial3Api
@@ -68,7 +59,6 @@ fun EditTaskScreen(
     viewModel: EditTaskViewModel = hiltViewModel()
 ) {
     val task by viewModel.toDoTask
-    val activity = LocalContext.current as AppCompatActivity
 
     EditTaskScreenContent(
         toDoTask = task,
@@ -79,8 +69,7 @@ fun EditTaskScreen(
         onDateChange = viewModel::onDateChange,
         onTimeChange = viewModel::onTimeChange,
         onPriorityChange = viewModel::onPriorityChange,
-        onFlagToggle = viewModel::onFlagToggle,
-        activity = activity
+        onFlagToggle = viewModel::onFlagToggle
     )
 }
 
@@ -97,7 +86,6 @@ fun EditTaskScreenContent(
     onTimeChange: (Int, Int) -> Unit,
     onPriorityChange: (Priority) -> Unit,
     onFlagToggle: (Boolean) -> Unit,
-    activity: AppCompatActivity?
 ) {
     Column(
         modifier = modifier
@@ -126,46 +114,27 @@ fun EditTaskScreenContent(
             }
         )
 
-    Spacer(modifier = Modifier.spacer())
+        Spacer(modifier = Modifier.spacer())
 
-    val fieldModifier = Modifier.fieldModifier()
-    BasicField(AppText.title, toDoTask.title, onTitleChange, fieldModifier)
-    BasicField(AppText.description, toDoTask.description, onDescriptionChange, fieldModifier)
-    BasicField(AppText.url, toDoTask.url, onUrlChange, fieldModifier)
+        val fieldModifier = Modifier.fieldModifier()
+        BasicField(AppText.title, toDoTask.title, onTitleChange, fieldModifier)
+        BasicField(AppText.description, toDoTask.description, onDescriptionChange, fieldModifier)
+        BasicField(AppText.url, toDoTask.url, onUrlChange, fieldModifier)
 
-    Spacer(modifier = Modifier.spacer())
+        Spacer(modifier = Modifier.spacer())
 
-    RegularCardEditor(AppText.date, AppIcon.ic_calendar, toDoTask.dueDate, Modifier.card()) {
-        val picker = MaterialDatePicker.Builder.datePicker().build()
-        activity?.let {
-            picker.show(it.supportFragmentManager, picker.toString())
-            picker.addOnPositiveButtonClickListener { timeInMillis -> onDateChange(timeInMillis) }
+        DateInput(displayedDate = toDoTask.dueDate, onDateChange)
+
+        TimeInput(displayTime = toDoTask.dueTime, onTimeChange)
+
+        PriorityInput(Priority.valueOf(toDoTask.priority), onPriorityChange)
+
+        FlagSelector(AppText.flag, toDoTask.flag, Modifier.card()) { newValue ->
+            onFlagToggle(newValue)
         }
+
+        Spacer(modifier = Modifier.spacer())
     }
-
-    RegularCardEditor(AppText.time, AppIcon.ic_clock, toDoTask.dueTime, Modifier.card()) {
-        val picker = MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build()
-
-        activity?.let {
-            picker.show(it.supportFragmentManager, picker.toString())
-            picker.addOnPositiveButtonClickListener { onTimeChange(picker.hour, picker.minute) }
-        }
-    }
-
-    PrioritySelector(
-        AppText.priority,
-        Priority.valueOf(toDoTask.priority),
-        Modifier.card()
-    ) { newValue ->
-        onPriorityChange(newValue)
-    }
-
-    FlagSelector(AppText.flag, toDoTask.flag, Modifier.card()) { newValue ->
-        onFlagToggle(newValue)
-    }
-
-    Spacer(modifier = Modifier.spacer())
-}
 }
 
 @Preview(showBackground = true)
@@ -188,8 +157,7 @@ fun EditTaskScreenPreview() {
             onDateChange = { },
             onTimeChange = { _, _ -> },
             onPriorityChange = { },
-            onFlagToggle = { },
-            activity = null
+            onFlagToggle = { }
         )
     }
 }
@@ -254,75 +222,3 @@ private fun FlagSelector(
     }
 }
 
-@Composable
-@ExperimentalMaterial3Api
-private fun PrioritySelector(
-    @StringRes label: Int,
-    priority: Priority,
-    modifier: Modifier,
-    onNewValue: (Priority) -> Unit
-) {
-
-    val options = stringArrayResource(R.array.task_priority_options)
-
-    OutlinedCard(
-        colors = CardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface,
-            disabledContainerColor = MaterialTheme.colorScheme.surface,
-            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
-        ),
-        modifier = modifier
-    ) {
-        var isExpanded by remember { mutableStateOf(false) }
-
-        ExposedDropdownMenuBox(
-            expanded = isExpanded,
-            modifier = Modifier,
-            onExpandedChange = { isExpanded = it }
-        ) {
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .menuAnchor(type = MenuAnchorType.PrimaryNotEditable),
-                readOnly = true,
-                value = options[priority.ordinal],
-                onValueChange = {},
-                label = { Text(stringResource(label)) },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(isExpanded) },
-                colors = dropdownColors()
-            )
-
-            ExposedDropdownMenu(
-                expanded = isExpanded,
-                onDismissRequest = { isExpanded = false },
-                containerColor = MaterialTheme.colorScheme.surface
-            ) {
-                options.forEachIndexed { index, selectionOption ->
-                    DropdownMenuItem(
-                        onClick = {
-                            onNewValue(Priority.entries[index])
-                            isExpanded = false
-                        },
-                        text = { Text(text = selectionOption) }
-                    )
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun dropdownColors(): TextFieldColors {
-    return ExposedDropdownMenuDefaults.textFieldColors(
-        focusedContainerColor = MaterialTheme.colorScheme.surface,
-        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-        focusedIndicatorColor = Color.Transparent,
-        unfocusedIndicatorColor = Color.Transparent,
-        unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
-        focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
-        focusedLabelColor = MaterialTheme.colorScheme.primary,
-        unfocusedLabelColor = MaterialTheme.colorScheme.primary
-    )
-}

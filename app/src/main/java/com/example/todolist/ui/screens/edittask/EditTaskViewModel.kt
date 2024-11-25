@@ -98,5 +98,6 @@ class EditTaskViewModel @Inject constructor(
   companion object {
     private const val UTC = "UTC"
     private const val DATE_FORMAT = "EEE, d MMM yyyy"
+    private const val TIME_FORMAT = "HH:mm a"
   }
 }
