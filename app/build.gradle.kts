@@ -56,7 +56,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
     implementation(libs.accompanist.permissions)
@@ -71,7 +70,6 @@ dependencies {
     implementation(libs.firebase.perf.ktx)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.config)
     implementation(libs.firebase.messaging)
 
     testImplementation(libs.junit)

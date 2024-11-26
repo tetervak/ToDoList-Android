@@ -18,7 +18,6 @@ package com.example.todolist.ui.screens.splash
 
 import androidx.compose.runtime.mutableStateOf
 import com.example.todolist.data.service.AccountService
-import com.example.todolist.data.service.ConfigurationService
 import com.example.todolist.data.service.LogService
 import com.example.todolist.ui.screens.ToDoListViewModel
 import com.google.firebase.auth.FirebaseAuthException
@@ -27,16 +26,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-  configurationService: ConfigurationService,
   private val accountService: AccountService,
   logService: LogService
 ) : ToDoListViewModel(logService) {
 
   val showError = mutableStateOf(false)
-
-  init {
-    launchCatching { configurationService.fetchConfiguration() }
-  }
 
   fun onAppStart(onSplashed: () -> Unit) {
     showError.value = false

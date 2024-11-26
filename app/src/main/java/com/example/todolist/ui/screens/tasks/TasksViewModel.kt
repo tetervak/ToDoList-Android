@@ -17,7 +17,6 @@ limitations under the License.
 package com.example.todolist.ui.screens.tasks
 
 import com.example.todolist.data.ToDoTask
-import com.example.todolist.data.service.ConfigurationService
 import com.example.todolist.data.service.LogService
 import com.example.todolist.data.service.StorageService
 import com.example.todolist.ui.screens.ToDoListViewModel
@@ -28,8 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TasksViewModel @Inject constructor(
   logService: LogService,
-  private val storageService: StorageService,
-  private val configurationService: ConfigurationService
+  private val storageService: StorageService
 ) : ToDoListViewModel(logService) {
 
   val tasks: Flow<List<ToDoTask>> = storageService.tasks

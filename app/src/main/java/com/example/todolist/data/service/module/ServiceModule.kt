@@ -17,11 +17,9 @@ limitations under the License.
 package com.example.todolist.data.service.module
 
 import com.example.todolist.data.service.AccountService
-import com.example.todolist.data.service.ConfigurationService
 import com.example.todolist.data.service.LogService
 import com.example.todolist.data.service.StorageService
 import com.example.todolist.data.service.impl.AccountServiceImpl
-import com.example.todolist.data.service.impl.ConfigurationServiceImpl
 import com.example.todolist.data.service.impl.LogServiceImpl
 import com.example.todolist.data.service.impl.StorageServiceImpl
 import dagger.Binds
@@ -37,7 +35,4 @@ abstract class ServiceModule {
   @Binds abstract fun provideLogService(impl: LogServiceImpl): LogService
 
   @Binds abstract fun provideStorageService(impl: StorageServiceImpl): StorageService
-
-  @Binds
-  abstract fun provideConfigurationService(impl: ConfigurationServiceImpl): ConfigurationService
 }
