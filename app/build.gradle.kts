@@ -58,8 +58,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.material)
 
-    implementation(libs.accompanist.permissions)
-
     kapt(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)

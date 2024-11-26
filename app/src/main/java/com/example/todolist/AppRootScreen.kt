@@ -16,11 +16,8 @@ limitations under the License.
 
 package com.example.todolist
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.res.Resources
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -37,23 +34,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.todolist.ui.common.composable.PermissionDialog
-import com.example.todolist.ui.common.composable.RationaleDialog
 import com.example.todolist.ui.common.snackbar.SnackbarManager
 import com.example.todolist.ui.navigation.ToDoListNavHost
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 fun AppRootScreen() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      RequestNotificationPermissionDialog()
-    }
 
       val appState: ToDoListAppState = rememberAppState()
 
@@ -70,18 +58,6 @@ fun AppRootScreen() {
       ) {
         ToDoListNavHost(appState)
       }
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@Composable
-fun RequestNotificationPermissionDialog() {
-  val permissionState = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
-
-  if (!permissionState.status.isGranted) {
-    if (permissionState.status.shouldShowRationale) RationaleDialog()
-    else PermissionDialog { permissionState.launchPermissionRequest() }
-  }
 }
 
 @Composable
