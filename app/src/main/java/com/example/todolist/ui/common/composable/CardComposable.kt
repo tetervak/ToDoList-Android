@@ -75,8 +75,7 @@ private fun CardEditor(
         .fillMaxWidth()
         .padding(16.dp)
     ) {
-      Column(modifier = Modifier.weight(1f)) { Text(stringResource(title), color = highlightColor) }
-
+      Text(stringResource(title), color = highlightColor, modifier = Modifier.weight(1f))
       if (content.isNotBlank()) {
         Text(text = content, modifier = Modifier.padding(16.dp, 0.dp))
       }
