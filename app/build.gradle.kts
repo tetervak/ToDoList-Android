@@ -67,7 +67,6 @@ dependencies {
     implementation(libs.firebase.perf.ktx)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.messaging)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
